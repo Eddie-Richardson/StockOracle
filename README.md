@@ -11,37 +11,45 @@ Save data in CSV format with metadata and optional predictions.
 Predict future closing prices using modular machine learning models such as Linear Regression.
 
 Installation
+
 Clone the repository:
 
 bash
 git clone https://github.com/Eddie-Richardson/StockOracle.git
+
 Navigate into the project directory:
 
 bash
 cd StockOracle
+
 Create a virtual environment (optional but recommended):
 
 bash
 python -m venv .venv
+
 Activate the virtual environment:
 
 On Windows:
 
 bash
 .venv\Scripts\activate
+
 On macOS/Linux:
 
 bash
 source .venv/bin/activate
+
 Install dependencies:
 
 bash
 pip install -r requirements.txt
 Usage
+
 Start the server:
 
 bash
 uvicorn main:app --reload
+
 Open the browser and navigate to:
 
 http://127.0.0.1:8000
