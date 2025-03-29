@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stock Data Results</title>
+  <link rel="stylesheet" type="text/css" href="/static/styles.css">
+</head>
+<body>
+  <h1>Stock Data Results</h1>
+  {% for result in results %}
+    <div class="stock-result">
+      <h2>{{ result.ticker }} ({{ result.status }})</h2>
+      {% if result.error %}
+        <p>Error: Sorry, we couldn't process your data. Details: {{ result.error }}</p>
+      {% else %}
+        <p>CSV Link: <a href="{{ result.csv_url }}">{{ result.csv_url }}</a></p>
+        <p>Prediction:</p>
+        {% if result.prediction is defined and result.prediction.predictions is defined and result.prediction.predictions %}
+          <ul>
+            <li>Predicted Close: {{ result.prediction.predictions[0] }}</li>
+            <li>MAE: {{ result.prediction.metrics.MAE }}</li>
+            <li>MSE: {{ result.prediction.metrics.MSE }}</li>
+          </ul>
+        {% else %}
+          <p>No predictions available.</p>
+        {% endif %}
+        <div>
+          <img src="{{ result.png_url }}" alt="Chart for {{ result.ticker }}">
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</body>
+</html>

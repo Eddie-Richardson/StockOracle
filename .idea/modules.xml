@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/StockGrid.iml" filepath="$PROJECT_DIR$/.idea/StockGrid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/StockOracle.iml" filepath="$PROJECT_DIR$/.idea/StockOracle.iml" />
     </modules>
   </component>
 </project>
