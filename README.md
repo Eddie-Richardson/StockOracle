@@ -103,6 +103,7 @@ Contributing
 Feel free to contribute! Fork the repository, make your changes, and open a pull request.
 
 Future Enhancements
+
 Support for additional machine learning models like ARIMA and LSTM.
 
 Enhanced UI with dynamic filtering options.
