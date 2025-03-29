@@ -56,26 +56,47 @@ http://127.0.0.1:8000
 Use the interactive form to input tickers, define parameters, and select prediction models.
 
 Folder Structure
+
 StockOracle/
+
 ├── app/
+
 │   ├── api/
+
 │   │   ├── stock.py         # Endpoints for stock data visualization and filtering
+
 │   │   └── submit.py        # Endpoint for bulk form submission
+
 │   ├── core/
+
 │   │   ├── config.py        # Configuration settings
+
 │   │   └── db.py            # Database initialization logic
+
 │   ├── models/
+
 │   │   ├── linear_model.py  # Linear regression implementation
+
 │   │   ├── ml_models.py     # ML model aggregator
+
 │   │   └── db.models.py     # Database model
+
 │   ├── utils/
+
 │   │   ├── data_utils.py    # Data fetching and saving
+
 │   │   ├── plot_utils.py    # Plot generation
+
 │   │   ├── prediction_utils.py  # Prediction management
+
 │   │   └── normalization.py     # Normalizes Data
+
 │   └── templates/           # HTML templates (index.html, results.html)
+
 ├── static/                  # Static assets (CSS, JS)
+
 ├── data/                    # Data storage (SQLite DB, CSV files)
+
 └── main.py                  # Entry point
 
 Contributing
