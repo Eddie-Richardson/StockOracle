@@ -1,0 +1,192 @@
+1. main.py
+Purpose: Acts as the entry point for the application and ties everything together. Key Functions:
+
+Initializes the FastAPI app.
+
+Sets up the lifespan event handler for startup/shutdown operations.
+
+Mounts static and data directories for serving files.
+
+Registers routers from api/stock.py and api/submit.py.
+
+Implements the root ("/") endpoint that renders the homepage (index.html).
+
+Workflow:
+
+@asynccontextmanager lifespan(app: FastAPI):
+
+Performs initialization tasks, such as setting up the database (via app.core.db.init_db()).
+
+Routers (stock.router, submit.router) define specific endpoints for the application.
+
+Directories for static files (/static) and data files (/data) are mounted for serving assets and results.
+
+2. app/api/stock.py
+Purpose: Contains endpoints for interacting with stock data. Key Functions:
+
+Fetches and filters stock data.
+
+Provides data visualizations or analytics related to stock trends.
+
+Typical Code Flow:
+
+User calls an endpoint for stock data.
+
+Endpoint fetches stock data from a source (e.g., external API or database).
+
+Applies filters or transformations based on user input.
+
+Returns the processed data in JSON format or as visualizations.
+
+Example: Endpoints like /get-stock-data or /filter-data might exist here to serve user requests.
+
+3. app/api/submit.py
+Purpose: Handles form submissions and manages bulk tasks. Key Functions:
+
+Validates user inputs from the homepage (index.html).
+
+Fetches raw stock data based on inputs like ticker symbol and date ranges.
+
+Invokes ML models for predictions (via models/ml_models.py).
+
+Saves processed data and generates output files (e.g., CSV and PNG).
+
+Typical Code Flow:
+
+User submits the form with ticker symbols, models, and time periods.
+
+Form data is validated.
+
+Fetches and preprocesses raw data (utils/data_utils.py).
+
+Applies predictions using selected models (models/ml_models.py or models/linear_model.py).
+
+Generates plots and saves files (utils/plot_utils.py).
+
+4. app/core/config.py
+Purpose: Stores configuration settings used across the application. Key Components:
+
+Initializes the templates object for rendering HTML files.
+
+Centralized constants or paths used throughout the app.
+
+5. app/core/db.py
+Purpose: Manages database initialization and connections. Key Functions:
+
+init_db() initializes the database schema.
+
+May include functions for connecting to and managing SQLite, PostgreSQL, or other databases.
+
+Typical Code Flow:
+
+Creates tables required for the app (e.g., storing stock data or predictions).
+
+Ensures the database connection is active during app runtime.
+
+Provides helper functions for querying or updating records.
+
+6. app/models/linear_model.py
+Purpose: Implements a linear regression model for stock predictions. Key Components:
+
+Includes methods for fitting the model to stock data.
+
+Generates predictions based on historical trends.
+
+Workflow:
+
+Accepts stock data as input.
+
+Fits a linear regression model to predict future closing prices.
+
+Returns predicted values along with metrics (e.g., MAE, MSE).
+
+7. app/models/ml_models.py
+Purpose: Aggregates various machine learning models for stock analysis and predictions. Key Components:
+
+Acts as a centralized module to manage multiple models (e.g., linear regression, time-series forecasting).
+
+Allows runtime selection of the desired model based on user input.
+
+8. app/models/db.models.py
+Purpose: Defines database schemas using ORM (Object-Relational Mapping). Typical Components:
+
+Models represent database tables (e.g., StockData, Predictions).
+
+Includes relationships and constraints, ensuring seamless integration with FastAPI.
+
+9. app/utils/data_utils.py
+Purpose: Manages data retrieval and preprocessing. Key Functions:
+
+Fetches stock data from external APIs or databases.
+
+Prepares raw data for saving or analysis (e.g., filtering unnecessary columns).
+
+Saves processed data as CSV files.
+
+10. app/utils/plot_utils.py
+Purpose: Handles the creation of visualizations (e.g., line charts for stock prices). Key Functions:
+
+Generates plots using libraries like Matplotlib or Seaborn.
+
+Saves plots as PNG files for users to download or view.
+
+11. app/utils/prediction_utils.py
+Purpose: Manages the prediction logic. Key Components:
+
+Applies selected models to normalized stock data.
+
+Formats prediction results for use in templates (results.html) or CSV files.
+
+12. app/utils/normalization.py
+Purpose: Normalizes stock data for consistent analysis and model performance. Key Components:
+
+Contains functions to scale data (e.g., MinMaxScaler or Z-score normalization).
+
+Ensures data consistency across different models.
+
+13. app/templates/index.html
+Purpose: Acts as the user interface for submitting stock data requests. Key Components:
+
+Includes forms for entering ticker symbols and selecting models.
+
+Links to the /submit endpoint to process user inputs.
+
+14. app/templates/results.html
+Purpose: Displays processed stock data, predictions, and plots. Key Components:
+
+Includes links to CSV and PNG files.
+
+Renders prediction metrics (e.g., MAE, MSE).
+
+15. static/styles.css
+Purpose: Provides styling for HTML templates. Key Components:
+
+CSS classes for layout, fonts, colors, and responsiveness.
+
+Improves the visual appeal of index.html and results.html.
+
+16. /data/
+Purpose: Stores dynamically generated files. Contents:
+
+Plots (.png): Visualizations of stock prices.
+
+Data Files (.csv): Processed stock data for further analysis.
+
+How It Works Together
+Your modular structure separates concerns cleanly:
+
+Frontend (HTML Templates + CSS):
+
+Users interact with the application through index.html and view results in results.html.
+
+Backend (API + Utils + Models):
+
+Handles user submissions, fetches stock data, applies predictions, and generates outputs.
+
+Database:
+
+Saves important records (e.g., user submissions, prediction results) for future use.
+
+Data Storage:
+
+Outputs (CSV, plots) are saved in /data/ for users to access.

@@ -1,10 +1,21 @@
 # app/utils/data_utils.py
+import os
+import time
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 import yfinance as yf
 from fastapi import HTTPException
 from dateutil import parser
 from app.core.config import DB_PATH
+
+def debug_data_structure(data, context=""):
+    """
+    Utility function to print the structure of the provided data.
+    """
+    print(f"Debugging Data Structure: {context}")
+    for i, row in enumerate(data[:5]):  # Print first 5 rows
+        print(f"Row {i + 1}: {row}")
+    print("...")
 
 def save_to_database(ticker, data):
     conn = sqlite3.connect(DB_PATH)
@@ -59,25 +70,44 @@ def filter_data(data, start_time=None, end_time=None, min_close_price=None, max_
         filtered.append(row)
     return filtered
 
-def fetch_stock_data(ticker: str, period: str = None, interval: str = None):
+
+def fetch_stock_data(ticker: str, period: str = None, interval: str = None, end_time: str = None):
     stock = yf.Ticker(ticker)
-    hist_data = stock.history(period=period, interval=interval)
+
+    if end_time:
+        adjusted_end_time = (datetime.strptime(end_time, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
+    else:
+        adjusted_end_time = None
+
+    hist_data = stock.history(period=period, interval=interval, end=adjusted_end_time)
     if hist_data.empty:
         raise HTTPException(status_code=404, detail="No data available for the given ticker or time period.")
     hist_data.reset_index(inplace=True)
     return hist_data.to_dict(orient="records")
 
 def fetch_or_get_data(ticker, period=None, interval=None, start_time=None, end_time=None):
+    if end_time:
+        end_time = f"{end_time} 23:59:59"
+
     db_data = get_data_from_database(ticker, start_date=start_time, end_date=end_time)
     if db_data:
         return [
-            {"Date": row[2], "Open": row[3], "High": row[4], "Low": row[5], "Close": row[6], "Volume": row[7]}
+            {
+                "Date": str(row[2]),
+                "Open": row[3],
+                "High": row[4],
+                "Low": row[5],
+                "Close": row[6],
+                "Volume": row[7],
+            }
             for row in db_data
         ]
     else:
-        raw_data = fetch_stock_data(ticker, period=period, interval=interval)
+        raw_data = fetch_data_with_retries(ticker, period=period, interval=interval)
+        raw_data = [{"Date": str(row["Date"]), **row} for row in raw_data]
         save_to_database(ticker, raw_data)
         return raw_data
+
 
 
 def generate_metadata(ticker: str, start_time, end_time, period, interval, extra_filters=None):
@@ -133,3 +163,22 @@ def save_csv_with_metadata(metadata: dict, data: list, ticker: str, timestamp: s
         raise Exception("Error saving CSV")
 
     return csv_file_path
+
+def create_ticker_folder(ticker_folder):
+    """
+    Ensures the ticker folder exists, creating it if necessary.
+    """
+    if not os.path.exists(ticker_folder):
+        os.makedirs(ticker_folder)
+
+def fetch_data_with_retries(ticker, period=None, interval=None, retries=3):
+    for attempt in range(retries):
+        try:
+            raw_data = fetch_stock_data(ticker, period=period, interval=interval)
+            if raw_data and len(raw_data) > 0:
+                return raw_data
+            print(f"Attempt {attempt + 1}/{retries}: No data fetched for {ticker}. Retrying...")
+        except Exception as e:
+            print(f"Attempt {attempt + 1}/{retries}: Error fetching data: {e}")
+        time.sleep(2)
+    raise HTTPException(status_code=500, detail=f"Failed to fetch data for {ticker} after {retries} attempts.")

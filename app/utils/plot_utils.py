@@ -4,17 +4,12 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-
 def save_plot_chart(ticker: str, data: list, ticker_folder: str, timestamp: str, prediction: dict = None) -> str:
-    """
-    Generate a PNG chart of the ticker's closing prices.
-    If prediction data is provided, annotate the chart.
-    Returns the PNG file path.
-    """
     png_filename = f"{ticker}_closing_prices_{timestamp}.png"
     png_file_path = os.path.join(ticker_folder, png_filename)
 
-    dates = [row["Date"] for row in data]
+    # Ensure dates are strings for compatibility
+    dates = [str(row["Date"]) for row in data]
     closing_prices = [row["Close"] for row in data]
 
     plt.figure(figsize=(12, 6))
@@ -22,9 +17,12 @@ def save_plot_chart(ticker: str, data: list, ticker_folder: str, timestamp: str,
     plt.xlabel("Date", fontsize=12)
     plt.ylabel("Price", fontsize=12)
     plt.title(f"{ticker} Closing Prices Over Time", fontsize=14)
+
+    # Format X-axis to display dates without time
+    plt.xticks(dates, [d.split(' ')[0] for d in dates], rotation=45, fontsize=10, ha='right')
+
     plt.legend(fontsize=10)
     plt.grid(alpha=0.5)
-    plt.xticks(rotation=45, fontsize=10, ha='right')
 
     if prediction is not None and "predictions" in prediction and "metrics" in prediction:
         predicted_close = prediction["predictions"][0]
@@ -37,5 +35,4 @@ def save_plot_chart(ticker: str, data: list, ticker_folder: str, timestamp: str,
     plt.tight_layout()
     plt.savefig(png_file_path)
     plt.close()
-    print(f"Plot saved successfully at {png_file_path}.")
     return png_file_path

@@ -11,27 +11,54 @@
     <input type="text" id="tickers" name="tickers" required><br><br>
 
     <label for="period">Period (e.g., 1mo):</label>
-    <input type="text" id="period" name="period"><br><br>
+    <input type="text" id="period" name="period" value="1mo"><br><br>
 
     <label for="interval">Interval (e.g., 1d):</label>
-    <input type="text" id="interval" name="interval"><br><br>
+    <input type="text" id="interval" name="interval" value="1d"><br><br>
 
     <label for="start_time">Start Date (YYYY-MM-DD):</label>
-    <input type="text" id="start_time" name="start_time"><br><br>
+    <input type="date" id="start_time" name="start_time"><br><br>
 
     <label for="end_time">End Date (YYYY-MM-DD):</label>
-    <input type="text" id="end_time" name="end_time"><br><br>
+    <input type="date" id="end_time" name="end_time"><br><br>
 
     <label for="prediction_model">Prediction Model:</label>
-      <select id="prediction_model" name="prediction_model">
-          <option value="">None</option>
-          <option value="linear">Linear Regression</option>
-          <option value="arima">ARIMA</option>
-          <option value="lstm">LSTM</option>
-</select>
+    <select id="prediction_model" name="prediction_model">
+        <option value="">None</option>
+        <option value="linear">Linear Regression</option>
+        <option value="arima">ARIMA</option>
+        <option value="lstm">LSTM</option>
+    </select>
     <br><br>
 
     <input type="submit" value="Submit">
   </form>
+
+  <script>
+      // Function to format date as 'YYYY-MM-DD'
+      function formatDate(date) {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+      }
+
+      // Get today's date
+      const today = new Date();
+
+      // Calculate the previous day
+      const previousDay = new Date(today);
+      previousDay.setDate(today.getDate() - 1);
+
+      // Calculate 1 month before the previous day
+      const oneMonthBefore = new Date(previousDay);
+      oneMonthBefore.setMonth(previousDay.getMonth() - 1);
+
+      // Set default values in the date fields
+      document.addEventListener("DOMContentLoaded", function() {
+          document.getElementById("end_time").value = formatDate(previousDay); // Previous day as default
+          document.getElementById("start_time").value = formatDate(oneMonthBefore); // 1 month before as default
+      });
+  </script>
 </body>
 </html>

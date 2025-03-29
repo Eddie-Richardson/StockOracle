@@ -1,20 +1,16 @@
 # app/api/submit.py
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
-
 from app.models.ml_models import get_prediction_method
-from app.utils.data_utils import save_csv_with_metadata, generate_metadata, fetch_or_get_data
+from app.utils.data_utils import save_csv_with_metadata, generate_metadata, fetch_or_get_data, create_ticker_folder
 from app.utils.normalization import normalize_param
 from app.core.config import templates
-import os
-from datetime import datetime
-
 from app.utils.plot_utils import save_plot_chart
 from app.utils.prediction_utils import save_prediction_to_database
+from datetime import datetime
+import os
 
 router = APIRouter()
-
-
 
 @router.post("/submit", response_class=HTMLResponse)
 def submit_form(
@@ -26,7 +22,7 @@ def submit_form(
         end_time: str = Form(None),
         prediction_model: str = Form(None)
 ):
-    # Normalize input parameters (empty fields become None)
+    # Normalize input parameters
     period = normalize_param(period, None)
     interval = normalize_param(interval, None)
     start_time = normalize_param(start_time, None)
@@ -37,10 +33,37 @@ def submit_form(
 
     for ticker in ticker_list:
         try:
-            raw_data = fetch_or_get_data(ticker, period, interval, start_time, end_time)
-            metadata = generate_metadata(ticker, start_time, end_time, period, interval)
             ticker_folder = os.path.join("data", ticker)
-            os.makedirs(ticker_folder, exist_ok=True)
+            create_ticker_folder(ticker_folder)
+
+            raw_data = fetch_or_get_data(ticker, period, interval, start_time, end_time)
+            if not raw_data or len(raw_data) == 0:
+                results.append({
+                    "ticker": ticker,
+                    "error": f"No data retrieved for ticker '{ticker}'.",
+                    "status": "failed",
+                    "prediction": {}
+                })
+                continue
+
+            # Ensure all dates are strings for downstream processing
+            raw_data = [{"Date": str(row["Date"]), **row} for row in raw_data]
+
+            metadata = generate_metadata(ticker, start_time, end_time, period, interval)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            if not raw_data or len(raw_data) == 0:
+                results.append({
+                    "ticker": ticker,
+                    "error": f"No data retrieved for ticker '{ticker}'.",
+                    "status": "failed",
+                    "prediction": {}
+                })
+                continue
+
+            # Ensure all dates are strings for downstream processing
+            raw_data = [{"Date": str(row["Date"]), **row} for row in raw_data]
+
+            metadata = generate_metadata(ticker, start_time, end_time, period, interval)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
             if prediction_model:  # Prediction model provided
@@ -73,4 +96,3 @@ def submit_form(
             })
 
     return templates.TemplateResponse("results.html", {"request": request, "results": results})
-

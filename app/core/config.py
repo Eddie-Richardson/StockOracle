@@ -19,7 +19,5 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES_DIR = os.path.join(BASE_DIR, "..", "templates")
 TEMPLATES_DIR = os.path.normpath(TEMPLATES_DIR)  # Optional: Normalize the path
 
-print("Templates Directory:", TEMPLATES_DIR)
-
 # Initialize Jinja2Templates with the correct path
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
