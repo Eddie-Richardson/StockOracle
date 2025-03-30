@@ -24,7 +24,8 @@ def init_db():
             prediction_timestamp TEXT,
             predicted_close REAL,
             mae REAL,
-            mse REAL
+            mse REAL,
+            prediction_model TEXT
         )
     """)
     conn.commit()

@@ -4,7 +4,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-def save_plot_chart(ticker: str, data: list, ticker_folder: str, timestamp: str, prediction: dict = None) -> str:
+def save_plot_chart(ticker: str, data: list, ticker_folder: str, timestamp: str, prediction: dict = None, model_name: str = None) -> str:
     png_filename = f"{ticker}_closing_prices_{timestamp}.png"
     png_file_path = os.path.join(ticker_folder, png_filename)
 
@@ -16,7 +16,7 @@ def save_plot_chart(ticker: str, data: list, ticker_folder: str, timestamp: str,
     plt.plot(dates, closing_prices, label=f"{ticker} Closing Prices", color="blue", linewidth=2)
     plt.xlabel("Date", fontsize=12)
     plt.ylabel("Price", fontsize=12)
-    plt.title(f"{ticker} Closing Prices Over Time", fontsize=14)
+    plt.title(f"{ticker} Closing Prices Over Time\n(Prediction Model: {model_name})", fontsize=14)
 
     # Format X-axis to display dates without time
     plt.xticks(dates, [d.split(' ')[0] for d in dates], rotation=45, fontsize=10, ha='right')

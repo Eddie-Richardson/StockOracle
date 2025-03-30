@@ -129,7 +129,7 @@ def generate_metadata(ticker: str, start_time, end_time, period, interval, extra
     return metadata
 
 
-def save_csv_with_metadata(metadata: dict, data: list, ticker: str, timestamp: str, prediction: dict = None) -> str:
+def save_csv_with_metadata(metadata: dict, data: list, ticker: str, timestamp: str, prediction: dict = None, model_name: str = None) -> str:
     """
     Save a CSV file containing metadata and stock data.
     Optionally appends prediction data.
@@ -147,6 +147,7 @@ def save_csv_with_metadata(metadata: dict, data: list, ticker: str, timestamp: s
             writer.writerow(["Metadata"])
             writer.writerow(["Stock Ticker", metadata["Stock Ticker"]])
             writer.writerow(["Request Timestamp", metadata["Request Timestamp"]])
+            writer.writerow(["Prediction Model Used", model_name])
             for key, value in metadata["Filters Applied"].items():
                 writer.writerow([key, value])
             writer.writerow([])  # Blank line for separation

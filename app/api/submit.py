@@ -72,11 +72,11 @@ def submit_form(
             else:  # No prediction model provided
                 prediction_results = {}
 
-            csv_file_path = save_csv_with_metadata(metadata, raw_data, ticker, timestamp, prediction=prediction_results)
-            png_file_path = save_plot_chart(ticker, raw_data, ticker_folder, timestamp, prediction=prediction_results)
+            csv_file_path = save_csv_with_metadata(metadata, raw_data, ticker, timestamp, prediction=prediction_results, model_name=prediction_model)
+            png_file_path = save_plot_chart(ticker, raw_data, ticker_folder, timestamp, prediction=prediction_results, model_name=prediction_model)
 
             try:
-                save_prediction_to_database(ticker, prediction_results)
+                save_prediction_to_database(ticker, prediction_results, prediction_model)
             except Exception as e:
                 print(f"Error saving prediction to DB: {e}")
 

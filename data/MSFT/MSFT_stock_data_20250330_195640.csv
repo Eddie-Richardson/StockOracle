@@ -1,8 +1,9 @@
 Metadata
 Stock Ticker,MSFT
-Request Timestamp,2025-03-29 13:40:18
-Start Time,2025-02-28
-End Time,2025-03-28
+Request Timestamp,2025-03-30 19:56:40
+Prediction Model Used,linear
+Start Time,2025-03-01
+End Time,2025-03-29
 Period,1mo
 Interval,1d
 

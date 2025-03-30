@@ -27,16 +27,17 @@ def predict_stock_trend(data, forecast_steps=1):
         "metrics": {"MAE": mae, "MSE": mse}
     }
 
-def save_prediction_to_database(ticker, prediction_data):
+def save_prediction_to_database(ticker, prediction_data, model_name):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     prediction_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     predicted_close = prediction_data["predictions"][0] if prediction_data.get("predictions") else None
     mae = prediction_data["metrics"]["MAE"] if "metrics" in prediction_data else None
     mse = prediction_data["metrics"]["MSE"] if "metrics" in prediction_data else None
+    prediction_model = model_name
     cursor.execute("""
-        INSERT INTO predictions (ticker, prediction_timestamp, predicted_close, mae, mse)
-        VALUES (?, ?, ?, ?, ?)
-    """, (ticker, prediction_timestamp, predicted_close, mae, mse))
+        INSERT INTO predictions (ticker, prediction_timestamp, predicted_close, mae, mse, prediction_model)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (ticker, prediction_timestamp, predicted_close, mae, mse, prediction_model))
     conn.commit()
     conn.close()
