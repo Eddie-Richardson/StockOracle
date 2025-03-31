@@ -1,8 +1,9 @@
 Metadata
 Stock Ticker,AAPL
-Request Timestamp,2025-03-30 19:37:33
-Start Time,2025-03-01
-End Time,2025-03-29
+Request Timestamp,2025-03-31 09:07:25
+Prediction Model Used,lstm
+Start Time,2025-03-02
+End Time,2025-03-30
 Period,1mo
 Interval,1d
 
@@ -29,5 +30,5 @@ Date,Open,High,Low,Close,Volume
 2025-03-28 00:00:00,221.6699981689453,223.80999755859375,217.67999267578125,217.89999389648438,39784100
 
 Prediction Results
-Predicted Closing Price,216.88172142303307
-MAE,14.716958553401634,MSE,2848.590021389698
+Predicted Closing Price,218.72697390830945
+MAE,3.362196445465088,MSE,14.348673820495605

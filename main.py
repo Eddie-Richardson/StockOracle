@@ -1,3 +1,4 @@
+# main.py
 from fastapi import FastAPI
 from app.api import stock, submit
 from app.core.config import templates

@@ -1,9 +1,9 @@
 Metadata
 Stock Ticker,GOOG
-Request Timestamp,2025-03-30 20:04:33
+Request Timestamp,2025-03-31 09:07:11
 Prediction Model Used,linear
-Start Time,2025-03-01
-End Time,2025-03-29
+Start Time,2025-03-02
+End Time,2025-03-30
 Period,1mo
 Interval,1d
 

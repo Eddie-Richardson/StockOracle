@@ -51,14 +51,6 @@ def submit_form(
 
             metadata = generate_metadata(ticker, start_time, end_time, period, interval)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            if not raw_data or len(raw_data) == 0:
-                results.append({
-                    "ticker": ticker,
-                    "error": f"No data retrieved for ticker '{ticker}'.",
-                    "status": "failed",
-                    "prediction": {}
-                })
-                continue
 
             # Ensure all dates are strings for downstream processing
             raw_data = [{"Date": str(row["Date"]), **row} for row in raw_data]

@@ -1,9 +1,9 @@
 Metadata
 Stock Ticker,AAPL
-Request Timestamp,2025-03-30 20:05:02
+Request Timestamp,2025-03-31 09:07:19
 Prediction Model Used,arima
-Start Time,2025-03-01
-End Time,2025-03-29
+Start Time,2025-03-02
+End Time,2025-03-30
 Period,1mo
 Interval,1d
 

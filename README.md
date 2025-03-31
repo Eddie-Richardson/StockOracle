@@ -77,6 +77,10 @@ StockOracle/
 
 │   │   ├── linear_model.py  # Linear regression implementation
 
+│   │   ├── arima_model.py   # Arima implementation
+
+│   │   ├── lstm_model.py    # Lstm implementation
+
 │   │   ├── ml_models.py     # ML model aggregator
 
 │   │   └── db.models.py     # Database model
@@ -103,8 +107,6 @@ Contributing
 Feel free to contribute! Fork the repository, make your changes, and open a pull request.
 
 Future Enhancements
-
-Support for additional machine learning models like ARIMA and LSTM.
 
 Enhanced UI with dynamic filtering options.
 

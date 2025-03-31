@@ -1,9 +1,9 @@
 Metadata
 Stock Ticker,GOOG
-Request Timestamp,2025-03-30 20:05:03
-Prediction Model Used,arima
-Start Time,2025-03-01
-End Time,2025-03-29
+Request Timestamp,2025-03-31 09:07:31
+Prediction Model Used,lstm
+Start Time,2025-03-02
+End Time,2025-03-30
 Period,1mo
 Interval,1d
 
@@ -30,5 +30,5 @@ Date,Open,High,Low,Close,Volume
 2025-03-28 00:00:00,162.36000061035156,163.80999755859375,155.33900451660156,156.05999755859375,34823000
 
 Prediction Results
-Predicted Closing Price,154.16091028225193
-MAE,10.89093355235065,MSE,1428.4984619688196
+Predicted Closing Price,166.18067848065039
+MAE,2.867968797683716,MSE,18.15545654296875

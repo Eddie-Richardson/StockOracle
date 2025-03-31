@@ -1,9 +1,9 @@
 Metadata
 Stock Ticker,MSFT
-Request Timestamp,2025-03-30 20:05:02
-Prediction Model Used,arima
-Start Time,2025-03-01
-End Time,2025-03-29
+Request Timestamp,2025-03-31 09:07:11
+Prediction Model Used,linear
+Start Time,2025-03-02
+End Time,2025-03-30
 Period,1mo
 Interval,1d
 
@@ -30,5 +30,5 @@ Date,Open,High,Low,Close,Volume
 2025-03-28 00:00:00,388.0799865722656,389.1300048828125,376.92999267578125,378.79998779296875,21613100
 
 Prediction Results
-Predicted Closing Price,383.0078651170721
-MAE,23.474933339641478,MSE,7575.298500490053
+Predicted Closing Price,387.00283909847866
+MAE,4.746022045164179,MSE,34.878104226908235
