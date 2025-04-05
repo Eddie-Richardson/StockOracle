@@ -88,3 +88,47 @@ def predict_stock_trend(data, forecast_steps=5):
         }
     except Exception as e:
         raise ValueError(f"Error fitting LSTM model: {e}")
+
+def generate_sequences(scaled_data, sequence_length):
+    X_train, y_train = [], []
+    for i in range(sequence_length, len(scaled_data)):
+        X_train.append(scaled_data[i-sequence_length:i, 0])
+        y_train.append(scaled_data[i, 0])
+    return np.array(X_train), np.array(y_train)
+
+
+def retrain_lstm_model(existing_data, new_data, model):
+    # Combine the old and new data
+    combined_data = np.concatenate([existing_data, new_data])
+
+    # Initialize and fit the scaler
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    scaled_data = scaler.fit_transform(combined_data.reshape(-1, 1))
+
+    # Define sequence length
+    sequence_length = 10
+
+    # Generate sequences for retraining
+    X_train, y_train = [], []
+    for i in range(sequence_length, len(scaled_data)):
+        X_train.append(scaled_data[i - sequence_length:i, 0])
+        y_train.append(scaled_data[i, 0])
+    X_train, y_train = np.array(X_train), np.array(y_train)
+
+    # Convert data to PyTorch tensors
+    X_train = torch.from_numpy(X_train).float().unsqueeze(2)
+    y_train = torch.from_numpy(y_train).float().unsqueeze(1)
+
+    # Retrain the model
+    model.train()
+    criterion = nn.MSELoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+    for epoch in range(50):  # Adjust epochs as needed
+        optimizer.zero_grad()
+        outputs = model(X_train)
+        loss = criterion(outputs, y_train)
+        loss.backward()
+        optimizer.step()
+
+    return model

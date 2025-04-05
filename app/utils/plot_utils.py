@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def save_plot_chart(ticker: str, data: list, ticker_folder: str, timestamp: str, prediction: dict = None, model_name: str = None) -> str:
     png_filename = f"{ticker}_closing_prices_{timestamp}.png"
-    png_file_path = os.path.join(ticker_folder, png_filename)
+    png_file_path = os.path.join(ticker_folder, model_name, png_filename)
 
     # Ensure dates are strings for compatibility
     dates = [str(row["Date"]) for row in data]

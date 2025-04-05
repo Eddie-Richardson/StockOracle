@@ -18,4 +18,4 @@ class Prediction(BaseModel):
     predicted_close: float
     mae: float
     mse: float
-    prediction_model: str
+    model: str

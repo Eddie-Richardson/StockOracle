@@ -4,10 +4,11 @@ from datetime import datetime
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
 from app.core.config import DEFAULT_PERIOD, DEFAULT_INTERVAL
-from app.utils.data_utils import fetch_or_get_data, filter_data, generate_metadata, save_csv_with_metadata
+from app.utils.data_utils import fetch_stock_data, filter_data, generate_metadata, save_csv_with_metadata
 from app.utils.normalization import normalize_param
 from app.utils.plot_utils import save_plot_chart
-from app.utils.prediction_utils import predict_stock_trend, save_prediction_to_database
+from app.utils.prediction_utils import save_prediction_to_database
+from app.models.linear_model import predict_stock_trend
 
 
 router = APIRouter()
@@ -31,7 +32,7 @@ def get_stock_data(
     start_time = normalize_param(start_time)
     end_time = normalize_param(end_time)
 
-    raw_data = fetch_or_get_data(ticker, period, interval, start_time, end_time)
+    raw_data = fetch_stock_data(ticker, period, interval, start_time, end_time)
     filtered_data = filter_data(raw_data, start_time, end_time, min_close_price, max_close_price, min_volume,
                                 max_volume)
     metadata = generate_metadata(ticker, start_time, end_time, period, interval, extra_filters={
@@ -78,7 +79,7 @@ def visualize_stock(
     start_time = normalize_param(start_time)
     end_time = normalize_param(end_time)
 
-    raw_data = fetch_or_get_data(ticker, period, interval, start_time, end_time)
+    raw_data = fetch_stock_data(ticker, period, interval, start_time, end_time)
     metadata = generate_metadata(ticker, start_time, end_time, period, interval)
     ticker_folder = os.path.join("data", ticker)
     os.makedirs(ticker_folder, exist_ok=True)

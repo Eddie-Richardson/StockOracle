@@ -40,3 +40,9 @@ def predict_stock_trend(data, forecast_steps=5):
         }
     except Exception as e:
         raise ValueError(f"Error fitting ARIMA model: {e}")
+
+def retrain_arima_model(existing_series, new_values):
+    updated_series = np.concatenate([existing_series, new_values])
+    model = ARIMA(updated_series, order=(p, d, q))
+    model_fit = model.fit()
+    return model_fit
